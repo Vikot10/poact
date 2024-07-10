@@ -29,7 +29,7 @@ func main() {
 	}
 }
 
-func run(cfg *config.Config, logger *zap.Logger) error {
+func run(cfg *config.Config, loggerй *zap.Logger) error {
 	return nil
 }
 
