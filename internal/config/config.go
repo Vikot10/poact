@@ -12,11 +12,13 @@ type Postgres struct {
 	Database    string `env:"DATABASE"`
 	SSLMode     string `env:"SSL_MODE" default:"disable"`
 	SSLCertPath string `env:"SSL_CERT_PATH"`
+	NeedMigrate bool   `env:"NEED_MIGRATE" default:"false"`
 }
 
 type Config struct {
 	Debug    bool     `env:"DEBUG"`
 	Postgres Postgres `env:"POSTGRES"`
+	Address  string   `env:"ADDRESS"`
 }
 
 func MustLoad() *Config {
