@@ -1,11 +1,12 @@
-module github.com/Vikot10/poact
+module github.com/Vikot10/viarticles
 
 go 1.21.7
 
 require (
+	github.com/Vikot10/poact v0.0.0-20240712153546-53b60395b1de
 	github.com/cristalhq/aconfig v0.18.5
 	github.com/golang-migrate/migrate/v4 v4.17.1
-	github.com/jackc/pgx/v5 v5.5.4
+	github.com/jackc/pgx/v5 v5.6.0
 	go.uber.org/zap v1.27.0
 )
 

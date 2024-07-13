@@ -5,13 +5,13 @@ create table article (
     created_at timestamp default now(),
     updated_at timestamp,
     deleted_at timestamp
-)
+);
 
 create table article_category (
     id serial primary key,
     category_id integer not null,
     article_id integer not null
-)
+);
 
 create table category (
     id serial primary key,
@@ -19,4 +19,4 @@ create table category (
     created_at timestamp default now(),
     updated_at timestamp,
     deleted_at timestamp
-)
+);

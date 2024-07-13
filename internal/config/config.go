@@ -25,7 +25,7 @@ func MustLoad() *Config {
 	cfg := Config{}
 
 	err := aconfig.LoaderFor(&cfg, aconfig.Config{
-		EnvPrefix: "UAUPDATE",
+		EnvPrefix: "VIARTICLES",
 	}).Load()
 	if err != nil {
 		panic(err)

@@ -18,7 +18,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"go.uber.org/zap"
 
-	"github.com/Vikot10/poact/internal/config"
+	"github.com/Vikot10/viarticles/internal/config"
 )
 
 var version = "undefined"
@@ -96,7 +96,7 @@ func makeMigration(pgConnection string, logger *zap.Logger, f fs.FS) error {
 	var d source.Driver
 	var errIofs error
 
-	d, errIofs = iofs.New(f, "migrations/")
+	d, errIofs = iofs.New(f, "migrations")
 	if errIofs != nil {
 		return fmt.Errorf("error new iofs: %w", errIofs)
 	}
