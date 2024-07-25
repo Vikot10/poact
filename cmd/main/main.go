@@ -10,6 +10,7 @@ import (
 	"net"
 	"os"
 	"os/signal"
+	"sync"
 
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
@@ -18,7 +19,9 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"go.uber.org/zap"
 
+	"github.com/Vikot10/viarticles/internal/application"
 	"github.com/Vikot10/viarticles/internal/config"
+	"github.com/Vikot10/viarticles/internal/storage"
 )
 
 var version = "undefined"
@@ -59,6 +62,21 @@ func run(cfg *config.Config, logger *zap.Logger) error {
 			return fmt.Errorf("migration error: %w", err)
 		}
 	}
+
+	wg := sync.WaitGroup{}
+
+	store := storage.New(dbPool)
+
+	app := application.New(store)
+	wg.Add(1)
+	go app.Run(ctx, cancel, &wg, ln)
+
+	<-ctx.Done()
+
+	wg.Wait()
+
+	logger.Info("stop")
+
 	return nil
 }
 

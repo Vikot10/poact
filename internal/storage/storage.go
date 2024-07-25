@@ -1,13 +1,24 @@
 package storage
 
-import "database/sql"
+import (
+	_ "embed"
+	"errors"
+
+	"github.com/jackc/pgx/v5/pgxpool"
+)
 
 type Storage struct {
-	DB *sql.DB
+	pg *pgxpool.Pool
 }
 
-func New(db *sql.DB) *Storage {
-	return &Storage{
-		DB: db,
+var (
+	ErrNotFound = errors.New("not found")
+)
+
+func New(pg *pgxpool.Pool) *Storage {
+	s := &Storage{
+		pg: pg,
 	}
+
+	return s
 }
