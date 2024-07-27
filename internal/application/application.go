@@ -18,16 +18,18 @@ import (
 type Application struct {
 	logger *zap.Logger
 	store  *storage.Storage
+	vk     *VK
 }
 
-type VkProvider interface {
+type VK interface {
 	GetFaves() ([]*dto.Fave, error)
 	SynchronizeFaves() error
 }
 
-func New(store *storage.Storage) *Application {
+func New(store *storage.Storage, logger *zap.Logger) *Application {
 	app := &Application{
-		store: store,
+		store:  store,
+		logger: logger,
 	}
 
 	return app

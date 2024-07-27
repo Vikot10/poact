@@ -67,7 +67,7 @@ func run(cfg *config.Config, logger *zap.Logger) error {
 
 	store := storage.New(dbPool)
 
-	app := application.New(store)
+	app := application.New(store, logger)
 	wg.Add(1)
 	go app.Run(ctx, cancel, &wg, ln)
 
