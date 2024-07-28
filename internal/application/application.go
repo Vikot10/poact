@@ -11,22 +11,22 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"go.uber.org/zap"
 
-	"github.com/Vikot10/viarticles/internal/dto"
+	"github.com/Vikot10/viarticles/internal/domain/dto"
 	"github.com/Vikot10/viarticles/internal/storage"
 )
 
 type Application struct {
 	logger *zap.Logger
 	store  *storage.Storage
-	vk     *VK
+	vk     *VkProvider
 }
 
-type VK interface {
+type VkProvider interface {
 	GetFaves() ([]*dto.Fave, error)
-	SynchronizeFaves() error
 }
 
 func New(store *storage.Storage, logger *zap.Logger) *Application {
+
 	app := &Application{
 		store:  store,
 		logger: logger,

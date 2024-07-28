@@ -6,8 +6,14 @@ import (
 	"github.com/Vikot10/viarticles/internal/storage"
 )
 
-type VKService struct {
+type VkService struct {
 	logger      *zap.Logger
-	storage     *storage.Storage
 	accessToken string
+}
+
+func New(logger *zap.Logger, storage *storage.Storage, accessToken string) *VkService {
+	return &VkService{
+		logger:      logger,
+		accessToken: accessToken,
+	}
 }
