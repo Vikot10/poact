@@ -16,9 +16,10 @@ type Postgres struct {
 }
 
 type Config struct {
-	Debug    bool     `env:"DEBUG"`
-	Postgres Postgres `env:"POSTGRES"`
-	Address  string   `env:"ADDRESS"`
+	Debug         bool     `env:"DEBUG"`
+	Postgres      Postgres `env:"POSTGRES"`
+	Address       string   `env:"ADDRESS"`
+	VkAccessToken string   `env:"VK_ACCESS_TOKEN"`
 }
 
 func MustLoad() *Config {
