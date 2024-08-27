@@ -1,8 +1,8 @@
 create table article (
     id serial primary key,
-    title text not null,
+    title nvarchar(255) not null,
     body text default '',
-    url text not null,
+    url nvarchar(255) not null,
     created_at timestamp default now(),
     updated_at timestamp,
     deleted_at timestamp

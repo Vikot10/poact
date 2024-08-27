@@ -2,25 +2,20 @@ package main
 
 import (
 	"context"
-	"embed"
-	"errors"
 	"fmt"
-	"io/fs"
 	"log"
 	"net"
 	"os"
 	"os/signal"
 	"sync"
 
-	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
-	"github.com/golang-migrate/migrate/v4/source"
-	"github.com/golang-migrate/migrate/v4/source/iofs"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"go.uber.org/zap"
 
 	"github.com/Vikot10/viarticles/internal/application"
 	"github.com/Vikot10/viarticles/internal/config"
+	"github.com/Vikot10/viarticles/internal/database"
 	"github.com/Vikot10/viarticles/internal/storage"
 )
 
@@ -57,7 +52,7 @@ func run(cfg *config.Config, logger *zap.Logger) error {
 	defer dbPool.Close()
 
 	if cfg.Postgres.NeedMigrate {
-		err := makeMigration(buildPGConnectionString(cfg.Postgres), logger, fsMain)
+		err := database.MakeMigration(buildPGConnectionString(cfg.Postgres), logger)
 		if err != nil {
 			return fmt.Errorf("migration error: %w", err)
 		}
@@ -68,7 +63,6 @@ func run(cfg *config.Config, logger *zap.Logger) error {
 	store := storage.New(dbPool)
 
 	app := application.New(store, logger)
-	wg.Add(1)
 	go app.Run(ctx, cancel, &wg, ln)
 
 	<-ctx.Done()
@@ -105,45 +99,4 @@ func connectionPostgres(ctx context.Context, cfgPg config.Postgres) (*pgxpool.Po
 	}
 
 	return dbPool, nil
-}
-
-//go:embed migrations/*.sql
-var fsMain embed.FS
-
-func makeMigration(pgConnection string, logger *zap.Logger, f fs.FS) error {
-	var d source.Driver
-	var errIofs error
-
-	d, errIofs = iofs.New(f, "migrations")
-	if errIofs != nil {
-		return fmt.Errorf("error new iofs: %w", errIofs)
-	}
-
-	m, err := migrate.NewWithSourceInstance("iofs", d, pgConnection)
-	if err != nil {
-		return fmt.Errorf("error new migrate: %w", err)
-	}
-	defer m.Close()
-
-	ver, dirty, errGetVersion := m.Version()
-	if errGetVersion != nil && !errors.Is(errGetVersion, migrate.ErrNilVersion) {
-		return fmt.Errorf("error get version: %w", errGetVersion)
-	}
-	if dirty {
-		m.Force(int(ver - 1))
-	}
-
-	errUp := m.Up()
-	if errUp != nil {
-		if errors.Is(errUp, migrate.ErrNoChange) {
-			logger.Info("no change for migrate")
-			return nil
-		}
-
-		return fmt.Errorf("error up migrate: %w", errUp)
-	}
-
-	logger.Info("migrate done")
-
-	return nil
 }

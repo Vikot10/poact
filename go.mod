@@ -1,6 +1,6 @@
 module github.com/Vikot10/viarticles
 
-go 1.21.7
+go 1.22.3
 
 require (
 	github.com/cristalhq/aconfig v0.18.5
