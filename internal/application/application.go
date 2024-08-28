@@ -11,7 +11,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"go.uber.org/zap"
 
-	"github.com/Vikot10/viarticles/internal/domain/dto"
+	"github.com/Vikot10/viarticles/internal/dto"
 	"github.com/Vikot10/viarticles/internal/storage"
 )
 
